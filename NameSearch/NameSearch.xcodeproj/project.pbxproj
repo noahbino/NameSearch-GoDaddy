@@ -102,6 +102,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6B6402F4263C6C5900865536 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				BCCC5E05250698E500AC95C0 /* PaymentsManager.swift */,
+				BCCC5E072506990E00AC95C0 /* PaymentMethod.swift */,
+				BC0E118E25030062007560B1 /* DomainSearchResponseTypes.swift */,
+				BC0E1190250319F5007560B1 /* ShoppingCart.swift */,
+				BCCC5DFF2506968F00AC95C0 /* Auth.swift */,
+				BCCC5DFD2506967000AC95C0 /* User.swift */,
+				BCCC5E01250696C000AC95C0 /* LoginResponse.swift */,
+				BCCC5DFB2506963000AC95C0 /* AuthManager.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		6B6402F5263C6C6E00865536 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				BCCC5DF92506931B00AC95C0 /* LoginViewController.swift */,
+				BCCC5E03250698C800AC95C0 /* PaymentMethodsViewController.swift */,
+				BC0E11922503267C007560B1 /* CartViewController.swift */,
+				BC0E11622502F6E1007560B1 /* DomainSearchViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		6B6402FF263C6CCF00865536 /* UITableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				BC0E11942503BD21007560B1 /* CartItemTableViewCell.swift */,
+			);
+			path = UITableViewCells;
+			sourceTree = "<group>";
+		};
 		BC0E11522502F6E1007560B1 = {
 			isa = PBXGroup;
 			children = (
@@ -125,26 +159,16 @@
 		BC0E115D2502F6E1007560B1 /* NameSearch */ = {
 			isa = PBXGroup;
 			children = (
+				6B6402FF263C6CCF00865536 /* UITableViewCells */,
+				6B6402F5263C6C6E00865536 /* ViewControllers */,
+				6B6402F4263C6C5900865536 /* Models */,
 				BC0E115E2502F6E1007560B1 /* AppDelegate.swift */,
 				BC0E11602502F6E1007560B1 /* SceneDelegate.swift */,
-				BC0E11622502F6E1007560B1 /* DomainSearchViewController.swift */,
 				BC0E11642502F6E1007560B1 /* Main.storyboard */,
 				BC0E11672502F6E5007560B1 /* Assets.xcassets */,
 				BC0E11692502F6E5007560B1 /* LaunchScreen.storyboard */,
 				BC0E116C2502F6E5007560B1 /* Info.plist */,
-				BC0E118E25030062007560B1 /* DomainSearchResponseTypes.swift */,
-				BC0E1190250319F5007560B1 /* ShoppingCart.swift */,
-				BC0E11922503267C007560B1 /* CartViewController.swift */,
-				BC0E11942503BD21007560B1 /* CartItemTableViewCell.swift */,
 				BC0E11952503BD21007560B1 /* CartItemTableViewCell.xib */,
-				BCCC5DF92506931B00AC95C0 /* LoginViewController.swift */,
-				BCCC5DFB2506963000AC95C0 /* AuthManager.swift */,
-				BCCC5DFD2506967000AC95C0 /* User.swift */,
-				BCCC5DFF2506968F00AC95C0 /* Auth.swift */,
-				BCCC5E01250696C000AC95C0 /* LoginResponse.swift */,
-				BCCC5E03250698C800AC95C0 /* PaymentMethodsViewController.swift */,
-				BCCC5E05250698E500AC95C0 /* PaymentsManager.swift */,
-				BCCC5E072506990E00AC95C0 /* PaymentMethod.swift */,
 			);
 			path = NameSearch;
 			sourceTree = "<group>";
@@ -487,6 +511,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = X4C5X25U9Q;
 				INFOPLIST_FILE = NameSearch/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -504,6 +529,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = X4C5X25U9Q;
 				INFOPLIST_FILE = NameSearch/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
