@@ -16,11 +16,7 @@ class PaymentMethodsViewController: UIViewController {
         getPaymentMethods()
     }
     
-    private var request: URLRequest {
-        let request = URLRequest(url: URL(string: "https://gd.proxied.io/user/payment-methods")!)
-
-        return request
-    }
+    private var request:URLRequest = URLRequest(url: URL(string: "https://gd.proxied.io/user/payment-methods")!)
     
     func getPaymentMethods(){
         let session = URLSession(configuration: .default)

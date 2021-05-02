@@ -9,7 +9,7 @@ class LoginViewController: UIViewController {
     
     private let initialButtonConstraint:CGFloat = 20
     
-    private let validation = Validation()
+    private let validation = AuthenticationValidation()
     
 
     

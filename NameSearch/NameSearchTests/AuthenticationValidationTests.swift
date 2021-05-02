@@ -12,11 +12,11 @@ import XCTest
 
 class ValidationTests: XCTestCase {
 
-    var validation: Validation!
+    var validation: AuthenticationValidation!
     
     override func setUp() {
         super.setUp()
-        validation = Validation()
+        validation = AuthenticationValidation()
     }
     
     override func tearDown() {
@@ -29,34 +29,34 @@ class ValidationTests: XCTestCase {
     }
     
     func test_username_is_nil() throws {
-        let expectedError = ValidationError.invalid
-        var error: ValidationError?
+        let expectedError = AuthenticationError.invalid
+        var error: AuthenticationError?
         XCTAssertThrowsError(try validation.validateUsername(nil)) { thrownError in
-            error = thrownError as? ValidationError
+            error = thrownError as? AuthenticationError
         }
         XCTAssertEqual(expectedError, error)
         XCTAssertEqual(expectedError.errorDescription, error?.errorDescription)
     }
     
     func test_username_too_short() throws {
-        let expectedError = ValidationError.userNameTooShort
-        var error: ValidationError?
+        let expectedError = AuthenticationError.userNameTooShort
+        var error: AuthenticationError?
         XCTAssertThrowsError(try validation.validateUsername("you")) { thrownError in
-            error = thrownError as? ValidationError
+            error = thrownError as? AuthenticationError
         }
         XCTAssertEqual(expectedError, error)
         XCTAssertEqual(expectedError.errorDescription, error?.errorDescription)
     }
     
     func test_username_too_long() throws {
-        let expectedError = ValidationError.userNameTooLong
-        var error: ValidationError?
+        let expectedError = AuthenticationError.userNameTooLong
+        var error: AuthenticationError?
         let username = "Hello Go Daddy Employees"
         
         XCTAssertTrue(username.count >= 20)
         
         XCTAssertThrowsError(try validation.validateUsername(username)) { thrownError in
-            error = thrownError as? ValidationError
+            error = thrownError as? AuthenticationError
         }
         XCTAssertEqual(expectedError, error)
         XCTAssertEqual(expectedError.errorDescription, error?.errorDescription)
@@ -66,52 +66,50 @@ class ValidationTests: XCTestCase {
     
     
     func test_is_valid_password() throws {
-        XCTAssertNoThrow(try validation.validateUsername(""))
+        XCTAssertNoThrow(try validation.validatePassword("password"))
     }
     
     func test_password_is_nil() throws {
-        let expectedError = ValidationError.invalid
-        var error: ValidationError?
+        let expectedError = AuthenticationError.invalid
+        var error: AuthenticationError?
         XCTAssertThrowsError(try validation.validateUsername(nil)) { thrownError in
-            error = thrownError as? ValidationError
+            error = thrownError as? AuthenticationError
         }
         XCTAssertEqual(expectedError, error)
         XCTAssertEqual(expectedError.errorDescription, error?.errorDescription)
     }
     
     func test_password_too_short() throws {
-        let expectedError = ValidationError.passwordTooShort
-        var error: ValidationError?
+        let expectedError = AuthenticationError.passwordTooShort
+        var error: AuthenticationError?
         XCTAssertThrowsError(try validation.validatePassword("you")) { thrownError in
-            error = thrownError as? ValidationError
+            error = thrownError as? AuthenticationError
         }
         XCTAssertEqual(expectedError, error)
         XCTAssertEqual(expectedError.errorDescription, error?.errorDescription)
     }
     
     func test_password_too_long() throws {
-        let expectedError = ValidationError.passwordTooLong
-        var error: ValidationError?
+        let expectedError = AuthenticationError.passwordTooLong
+        var error: AuthenticationError?
         let password = "thisisareallylongpasswordfornogoodreason"
         
         XCTAssertTrue(password.count >= 20)
         
         XCTAssertThrowsError(try validation.validatePassword(password)) { thrownError in
-            error = thrownError as? ValidationError
+            error = thrownError as? AuthenticationError
         }
         XCTAssertEqual(expectedError, error)
         XCTAssertEqual(expectedError.errorDescription, error?.errorDescription)
     }
     
     func test_password_contains_space() throws {
-        let expectedError = ValidationError.passwordContainsSpace
-        var error: ValidationError?
+        let expectedError = AuthenticationError.passwordContainsSpace
+        var error: AuthenticationError?
         let password = "a password"
         
-        XCTAssertTrue(password.count >= 20)
-        
         XCTAssertThrowsError(try validation.validatePassword(password)) { thrownError in
-            error = thrownError as? ValidationError
+            error = thrownError as? AuthenticationError
         }
         XCTAssertEqual(expectedError, error)
         XCTAssertEqual(expectedError.errorDescription, error?.errorDescription)

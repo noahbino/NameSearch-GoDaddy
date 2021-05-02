@@ -8,26 +8,26 @@
 
 import Foundation
 
-struct Validation {
+struct AuthenticationValidation {
     func validateUsername(_ username: String?) throws -> String {
-        guard let username = username else {throw ValidationError.invalid}
-        guard username.count > 3 else {throw ValidationError.userNameTooShort}
-        guard username.count < 20 else {throw ValidationError.userNameTooLong}
+        guard let username = username else {throw AuthenticationError.invalid}
+        guard username.count > 3 else {throw AuthenticationError.userNameTooShort}
+        guard username.count < 20 else {throw AuthenticationError.userNameTooLong}
         return username
     }
     
     func validatePassword(_ password: String?) throws -> String {
-        guard let password = password else {throw ValidationError.invalid}
-        guard password.count > 6 else {throw ValidationError.passwordTooShort}
-        guard password.count < 20 else {throw ValidationError.passwordTooLong}
+        guard let password = password else {throw AuthenticationError.invalid}
+        guard password.count > 6 else {throw AuthenticationError.passwordTooShort}
+        guard password.count < 20 else {throw AuthenticationError.passwordTooLong}
         if password.contains(" ") {
-            throw ValidationError.passwordContainsSpace
+            throw AuthenticationError.passwordContainsSpace
         }
         return password
     }
 }
 
-    enum ValidationError: LocalizedError {
+    enum AuthenticationError: LocalizedError {
         case invalid
         case userNameTooShort
         case passwordTooShort

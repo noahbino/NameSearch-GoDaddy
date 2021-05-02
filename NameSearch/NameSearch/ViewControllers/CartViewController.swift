@@ -6,6 +6,8 @@ class CartViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
     
     var paymentMethod: PaymentMethod?
+    
+    let paymentService = PaymentService()
 
     @IBAction func payButtonTapped(_ sender: UIButton) {
         if let paymentMethod = self.paymentMethod {
@@ -54,21 +56,15 @@ class CartViewController: UIViewController {
         }
     
     }
+    
+    
 
     func performPayment(paymentMethod: PaymentMethod) {
         payButton.isEnabled = false
-
-        let dict: [String: String] = [
-            "auth": AuthManager.shared.token!,
-            "token": paymentMethod.token
-        ]
-
-        var request = URLRequest(url: URL(string: "https://gd.proxied.io/payments/process")!)
-        request.httpMethod = "POST"
-        request.httpBody = try! JSONSerialization.data(withJSONObject: dict, options: .fragmentsAllowed)
-
-        let session = URLSession(configuration: .default)
-        let task = session.dataTask(with: request) { (data, response, error) in
+        
+        paymentService.tryPurchase(request: getRequest(paymentMethod: paymentMethod), paymentMethod: paymentMethod) { [weak self] (error) in
+            guard let self = self else {return}
+            
             if let error = error {
                 let controller = UIAlertController(title: "Oops!", message: error.localizedDescription, preferredStyle: .alert)
 
@@ -82,9 +78,12 @@ class CartViewController: UIViewController {
                     self.present(controller, animated: true)
                 }
             } else {
+                ShoppingCart.shared.domains.removeAll()
                 let controller = UIAlertController(title: "All done!", message: "Your purchase is complete!", preferredStyle: .alert)
 
-                let action = UIAlertAction(title: "Ok", style: .default) { _ in }
+                let action = UIAlertAction(title: "Ok", style: .default) { _ in
+                    self.navigationController?.popViewController(animated: true)
+                }
 
                 controller.addAction(action)
 
@@ -92,14 +91,30 @@ class CartViewController: UIViewController {
                     self.present(controller, animated: true)
                 }
             }
-
         }
-        task.resume()
+
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let vc = segue.destination as! PaymentMethodsViewController
         vc.delegate = self
+    }
+}
+
+//MARK: Logic for purchasing request
+extension CartViewController {
+
+    func getRequest(paymentMethod: PaymentMethod) -> URLRequest {
+        let dict: [String: String] = [
+            "auth": AuthManager.shared.token!,
+            "token": paymentMethod.token
+        ]
+        
+        var request = URLRequest(url: URL(string: "https://gd.proxied.io/payments/process")!)
+        request.httpMethod = "POST"
+        request.httpBody = try! JSONSerialization.data(withJSONObject: dict, options: .fragmentsAllowed)
+        
+        return request
     }
 }
 

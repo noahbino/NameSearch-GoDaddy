@@ -43,9 +43,10 @@ class DomainSearchViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
     }
+    
 
     func loadData() {
-        let searchTerms = searchTermsTextField.text!
+        guard let searchTerms = searchTermsTextField.text else {return}
         let session = URLSession(configuration: .default)
 
         var urlComponents = URLComponents(string: "https://gd.proxied.io/search/exact")!
