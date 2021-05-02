@@ -4,12 +4,14 @@ class CartViewController: UIViewController {
 
     @IBOutlet var payButton: UIButton!
     @IBOutlet var tableView: UITableView!
+    
+    var paymentMethod: PaymentMethod?
 
     @IBAction func payButtonTapped(_ sender: UIButton) {
-        if PaymentsManager.shared.selectedPaymentMethod == nil {
-            self.performSegue(withIdentifier: "showPaymentMethods", sender: self)
+        if let paymentMethod = self.paymentMethod {
+            performPayment(paymentMethod: paymentMethod)
         } else {
-            performPayment()
+            self.performSegue(withIdentifier: "showPaymentMethods", sender: self)
         }
     }
 
@@ -17,7 +19,7 @@ class CartViewController: UIViewController {
         super.viewDidLoad()
 
         tableView.register(UINib(nibName: "CartItemTableViewCell", bundle: Bundle.main), forCellReuseIdentifier: "CartItemCell")
-        updatePayButton()
+        updatePayButton(paymentMethod: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -32,10 +34,9 @@ class CartViewController: UIViewController {
         super.viewWillDisappear(animated)
     }
 
-    func updatePayButton() {
-        if PaymentsManager.shared.selectedPaymentMethod == nil {
-            payButton.setTitle("Select a Payment Method", for: .normal)
-        } else {
+    func updatePayButton(paymentMethod: PaymentMethod?) {
+        
+        if paymentMethod != nil {
             var totalPayment = 0.00
 
             ShoppingCart.shared.domains.forEach {
@@ -47,15 +48,19 @@ class CartViewController: UIViewController {
             currencyFormatter.numberStyle = .currency
 
             payButton.setTitle("Pay \(currencyFormatter.string(from: NSNumber(value: totalPayment))!) Now", for: .normal)
+        } else {
+            payButton.setTitle("Select a Payment Method", for: .normal)
+
         }
+    
     }
 
-    func performPayment() {
+    func performPayment(paymentMethod: PaymentMethod) {
         payButton.isEnabled = false
 
         let dict: [String: String] = [
             "auth": AuthManager.shared.token!,
-            "token": PaymentsManager.shared.selectedPaymentMethod!.token
+            "token": paymentMethod.token
         ]
 
         var request = URLRequest(url: URL(string: "https://gd.proxied.io/payments/process")!)
@@ -119,13 +124,14 @@ extension CartViewController: UITableViewDataSource {
 
 extension CartViewController: CartItemTableViewCellDelegate {
     func didRemoveFromCart() {
-        updatePayButton()
+        updatePayButton(paymentMethod: self.paymentMethod)
         tableView.reloadData()
     }
 }
 
 extension CartViewController: PaymentMethodsViewControllerDelegate {
-    func didSelectPaymentMethod() {
-        updatePayButton()
+    func didSelectPaymentMethod(paymentMethod: PaymentMethod) {
+        self.paymentMethod = paymentMethod
+        updatePayButton(paymentMethod: paymentMethod)
     }
 }
