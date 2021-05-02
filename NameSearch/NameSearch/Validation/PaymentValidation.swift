@@ -14,25 +14,26 @@ struct PaymentValidation {
         let dict = try! JSONDecoder().decode([String:String].self, from: request.httpBody!)
         
         if request.httpMethod != "POST" {
-            throw PurchaseError.isNotPOST
+            throw PurchaseError.invalidMethod
         }
         
-        guard dict["auth"] != nil else {throw PurchaseError.invalidAuthToken}
-        guard dict["token"] != nil else {throw PurchaseError.invalidPaymentToken}
+        
+        guard dict["auth"] != "" else {throw PurchaseError.invalidAuthToken}
+        guard dict["token"] != "" else {throw PurchaseError.invalidPaymentToken}
         
         return request
     }
 }
 
 enum PurchaseError: LocalizedError {
-    case isNotPOST
+    case invalidMethod
     case invalidAuthToken
     case invalidPaymentToken
     case invalid
     
     var errorDescription: String? {
         switch self {
-        case .isNotPOST:
+        case .invalidMethod:
             return "This request should be of type POST"
         case .invalidAuthToken:
             return "Invalid auth token"
