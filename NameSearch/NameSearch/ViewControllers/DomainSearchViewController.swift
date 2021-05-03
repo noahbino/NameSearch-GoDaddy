@@ -14,6 +14,7 @@ class DomainSearchViewController: UIViewController {
     @IBOutlet var cartButton: UIButton!
     
     let domainService = DomainService()
+    let searchValidaton = SearchValidation()
 
     @IBAction func searchButtonTapped(_ sender: UIButton) {
         searchTermsTextField.resignFirstResponder()
@@ -72,18 +73,22 @@ class DomainSearchViewController: UIViewController {
     }
     
     func loadData(){
-        
-        if searchTermsTextField.text == "" {return}
-        domainService.loadDomains(request: request!, suggestionRequest: suggestionsRequest) { [weak self] (domains) in
-            guard let self = self else {return}
-            
-            if let domains = domains {
-                self.data = domains
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
+        do {
+            _ = try searchValidaton.validateSearchRequest(search: searchTermsTextField.text)
+            domainService.loadDomains(request: request!, suggestionRequest: suggestionsRequest) { [weak self] (domains) in
+                guard let self = self else {return}
+                
+                if let domains = domains {
+                    self.data = domains
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
                 }
             }
+        } catch {
+            present(error)
         }
+        
     }
 
     private func configureCartButton() {
