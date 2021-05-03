@@ -22,19 +22,20 @@ class DomainSearchViewController: UIViewController {
     }
 
     @IBAction func cartButtonTapped(_ sender: UIButton) {
-
+        
     }
 
     var data: [Domain]?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        configureCartButton()
+        self.searchTermsTextField.delegate = self
+        self.searchTermsTextField.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: .editingChanged)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        configureCartButton()
         tableView.reloadData()
     }
 
@@ -137,3 +138,16 @@ extension DomainSearchViewController: UITableViewDelegate {
         configureCartButton()
     }
 }
+
+//MARK: UITextField Methods
+extension DomainSearchViewController: UITextFieldDelegate {
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        if(textField.text == ""){
+            self.data?.removeAll()
+            self.tableView.reloadData()
+        }
+    }
+}
+
+
+
