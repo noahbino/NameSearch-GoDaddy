@@ -12,6 +12,8 @@ class DomainSearchViewController: UIViewController {
     @IBOutlet var searchTermsTextField: UITextField!
     @IBOutlet var tableView: UITableView!
     @IBOutlet var cartButton: UIButton!
+    
+    let domainService = DomainService()
 
     @IBAction func searchButtonTapped(_ sender: UIButton) {
         searchTermsTextField.resignFirstResponder()
@@ -69,48 +71,19 @@ class DomainSearchViewController: UIViewController {
         return suggestionsRequest
     }
     
-    
-    func loadData() {
-        guard let request = self.request else {return}
+    func loadData(){
         
-        let session = URLSession(configuration: .default)
-
-        session.dataTask(with: request) { [weak self](data, response, error) in
+        if searchTermsTextField.text == "" {return}
+        domainService.loadDomains(request: request!, suggestionRequest: suggestionsRequest) { [weak self] (domains) in
             guard let self = self else {return}
-            guard error == nil else { return }
-
-            if let data = data {
-                
-                let exactMatchResponse = try! JSONDecoder().decode(DomainSearchExactMatchResponse.self, from: data)
-
-                session.dataTask(with: self.suggestionsRequest) { (suggestionsData, suggestionsResponse, suggestionsError) in
-                    guard error == nil else { return }
-
-                    if let suggestionsData = suggestionsData {
-                        let suggestionsResponse = try! JSONDecoder().decode(DomainSearchRecommendedResponse.self, from: suggestionsData)
-
-                        let exactDomainPriceInfo = exactMatchResponse.products.first(where: { $0.productId == exactMatchResponse.domain.productId })!.priceInfo
-                        let exactDomain = Domain(name: exactMatchResponse.domain.fqdn,
-                                                 price: exactDomainPriceInfo.currentPriceDisplay,
-                                                 productId: exactMatchResponse.domain.productId)
-
-                        let suggestionDomains = suggestionsResponse.domains.map { domain -> Domain in
-                            let priceInfo = suggestionsResponse.products.first(where: { price in
-                                price.productId == domain.productId
-                            })!.priceInfo
-
-                            return Domain(name: domain.fqdn, price: priceInfo.currentPriceDisplay, productId: domain.productId)
-                        }
-
-                        self.data = [exactDomain] + suggestionDomains
-
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                        }
-                    }
-                }.resume()
+            
+            if let domains = domains {
+                self.data = domains
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
-        }.resume()
+        }
     }
 
     private func configureCartButton() {

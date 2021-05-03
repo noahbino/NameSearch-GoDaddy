@@ -42,9 +42,12 @@ class CartViewController: UIViewController {
             var totalPayment = 0.00
 
             ShoppingCart.shared.domains.forEach {
-                let priceDouble = Double($0.price.replacingOccurrences(of: "$", with: ""))!
-                totalPayment += priceDouble
+                if let priceDouble = Double($0.price.replacingOccurrences(of: "$", with: "")) {
+                    totalPayment += priceDouble
+                }
             }
+            
+            
 
             let currencyFormatter = NumberFormatter()
             currencyFormatter.numberStyle = .currency
@@ -103,7 +106,6 @@ class CartViewController: UIViewController {
 
 //MARK: Logic for purchasing request
 extension CartViewController {
-
     func getRequest(paymentMethod: PaymentMethod) -> URLRequest {
         let dict: [String: String] = [
             "auth": AuthManager.shared.token!,

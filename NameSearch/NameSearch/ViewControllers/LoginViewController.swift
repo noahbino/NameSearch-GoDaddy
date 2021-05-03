@@ -41,7 +41,9 @@ class LoginViewController: UIViewController {
             if let error = error {
                 self.present(error)
             } else {
-                self.performSegue(withIdentifier: "showDomainSearch", sender: self)
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "showDomainSearch", sender: self)
+                }
             }
         }
     }

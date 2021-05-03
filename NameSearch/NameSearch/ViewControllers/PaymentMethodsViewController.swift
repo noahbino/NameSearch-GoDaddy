@@ -24,6 +24,9 @@ class PaymentMethodsViewController: UIViewController {
             guard let self = self else {return}
             if let methods = methods {
                 self.paymentMethods = methods
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
         }
     }
