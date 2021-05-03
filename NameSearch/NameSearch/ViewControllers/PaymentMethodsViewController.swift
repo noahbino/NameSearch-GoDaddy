@@ -10,6 +10,7 @@ class PaymentMethodsViewController: UIViewController {
 
     var delegate: PaymentMethodsViewControllerDelegate?
     var paymentMethods: [PaymentMethod]?
+    let paymentService = PaymentService()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,23 +20,16 @@ class PaymentMethodsViewController: UIViewController {
     private var request:URLRequest = URLRequest(url: URL(string: "https://gd.proxied.io/user/payment-methods")!)
     
     func getPaymentMethods(){
-        let session = URLSession(configuration: .default)
-        session.dataTask(with: request) { (data, response, error) in
-            guard error == nil else { return }
-
-            self.paymentMethods = try!
-                JSONDecoder().decode([PaymentMethod].self, from: data!)
-
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else {return}
-                self.tableView.reloadData()
+        paymentService.paymentMethodRequest(request: request) { [weak self] (methods) in
+            guard let self = self else {return}
+            if let methods = methods {
+                self.paymentMethods = methods
             }
-        }.resume()
+        }
     }
     
     
 }
-
 extension PaymentMethodsViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1

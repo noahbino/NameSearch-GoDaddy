@@ -15,6 +15,11 @@ class CartItemTableViewCell: UITableViewCell {
 
         delegate.didRemoveFromCart()
     }
+    
+    func setupCell(name: String, price: String){
+        self.nameLabel.text = name
+        self.priceLabel.text = price
+    }
 
     var delegate: CartItemTableViewCellDelegate!
 }

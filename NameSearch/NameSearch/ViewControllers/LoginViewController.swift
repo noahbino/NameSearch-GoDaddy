@@ -9,7 +9,7 @@ class LoginViewController: UIViewController {
     
     private let initialButtonConstraint:CGFloat = 20
     
-    private let validation = AuthenticationValidation()
+    private let authService = AuthService()
     
 
     
@@ -35,48 +35,18 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func loginButtonTapped(_ sender: UIButton) {
-        
-        do {
-            _ = try validation.validateUsername(usernameTextField.text)
-            _ = try validation.validatePassword(passwordTextField.text)
+        authService.tryLogin(request: request, username: usernameTextField.text!, password: passwordTextField.text!) { [weak self] (error) in
+            guard let self = self else {return}
             
-            tryLogin { (success) in
-                if success {
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else {return}
-                        self.performSegue(withIdentifier: "showDomainSearch", sender: self)
-                    }
-                }
+            if let error = error {
+                self.present(error)
+            } else {
+                self.performSegue(withIdentifier: "showDomainSearch", sender: self)
             }
-            
-        } catch {
-            present(error)
         }
-
     }
 }
 
-//MARK: LoginViewController Logic
-extension LoginViewController {
-    
-    func tryLogin(handler: @escaping (_ success: Bool) -> ()){
-        let session = URLSession(configuration: .default)
-        session.dataTask(with: request) { (data, response, error) in
-            guard error == nil else {
-                handler(false)
-                return
-            }
-
-            let authReponse = try! JSONDecoder().decode(LoginResponse.self, from: data!)
-
-            AuthManager.shared.user = authReponse.user
-            AuthManager.shared.token = authReponse.auth.token
-
-            handler(true)
-        }.resume()
-    }
-    
-}
 
 //MARK: Notification Extension
 extension LoginViewController {

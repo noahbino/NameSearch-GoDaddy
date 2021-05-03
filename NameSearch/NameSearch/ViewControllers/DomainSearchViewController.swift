@@ -32,7 +32,6 @@ class DomainSearchViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
         tableView.reloadData()
     }
 
@@ -44,11 +43,10 @@ class DomainSearchViewController: UIViewController {
         super.viewWillDisappear(animated)
     }
     
-
-    func loadData() {
-        guard let searchTerms = searchTermsTextField.text else {return}
-        let session = URLSession(configuration: .default)
-
+    
+    
+    var request:URLRequest? {
+        guard let searchTerms = searchTermsTextField.text else {return nil}
         var urlComponents = URLComponents(string: "https://gd.proxied.io/search/exact")!
         urlComponents.queryItems = [
             URLQueryItem(name: "q", value: searchTerms)
@@ -56,22 +54,36 @@ class DomainSearchViewController: UIViewController {
 
         var request = URLRequest(url: urlComponents.url!)
         request.httpMethod = "GET"
+        return request
+    }
+    
+    var suggestionsRequest:URLRequest {
+        let searchTerms = searchTermsTextField.text!
+        var suggestionsComponents = URLComponents(string: "https://gd.proxied.io/search/spins")!
+        suggestionsComponents.queryItems = [
+            URLQueryItem(name: "q", value: searchTerms)
+        ]
 
-        let task = session.dataTask(with: request) { (data, response, error) in
+        var suggestionsRequest = URLRequest(url: suggestionsComponents.url!)
+        suggestionsRequest.httpMethod = "GET"
+        return suggestionsRequest
+    }
+    
+    
+    func loadData() {
+        guard let request = self.request else {return}
+        
+        let session = URLSession(configuration: .default)
+
+        session.dataTask(with: request) { [weak self](data, response, error) in
+            guard let self = self else {return}
             guard error == nil else { return }
 
             if let data = data {
+                
                 let exactMatchResponse = try! JSONDecoder().decode(DomainSearchExactMatchResponse.self, from: data)
 
-                var suggestionsComponents = URLComponents(string: "https://gd.proxied.io/search/spins")!
-                suggestionsComponents.queryItems = [
-                    URLQueryItem(name: "q", value: searchTerms)
-                ]
-
-                var suggestionsRequest = URLRequest(url: suggestionsComponents.url!)
-                suggestionsRequest.httpMethod = "GET"
-
-                let suggestionsTask = session.dataTask(with: suggestionsRequest) { (suggestionsData, suggestionsResponse, suggestionsError) in
+                session.dataTask(with: self.suggestionsRequest) { (suggestionsData, suggestionsResponse, suggestionsError) in
                     guard error == nil else { return }
 
                     if let suggestionsData = suggestionsData {
@@ -96,13 +108,9 @@ class DomainSearchViewController: UIViewController {
                             self.tableView.reloadData()
                         }
                     }
-                }
-
-                suggestionsTask.resume()
+                }.resume()
             }
-        }
-
-        task.resume()
+        }.resume()
     }
 
     private func configureCartButton() {

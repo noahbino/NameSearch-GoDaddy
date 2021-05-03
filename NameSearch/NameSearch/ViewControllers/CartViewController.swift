@@ -74,7 +74,7 @@ class CartViewController: UIViewController {
 
                 controller.addAction(action)
 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { 
                     self.present(controller, animated: true)
                 }
             } else {
@@ -127,11 +127,9 @@ extension CartViewController: UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CartItemCell", for: indexPath) as! CartItemTableViewCell
-
         cell.delegate = self
-
-        cell.nameLabel.text = ShoppingCart.shared.domains[indexPath.row].name
-        cell.priceLabel.text = ShoppingCart.shared.domains[indexPath.row].price
+        let item = ShoppingCart.shared.domains[indexPath.row]
+        cell.setupCell(name: item.name, price: item.price)
 
         return cell
     }

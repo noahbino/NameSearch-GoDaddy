@@ -11,6 +11,7 @@
 		6B534E0E263F3F4400F032A4 /* PaymentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B534E0D263F3F4400F032A4 /* PaymentService.swift */; };
 		6B534E13263F462900F032A4 /* PaymentValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B534E12263F462800F032A4 /* PaymentValidationTests.swift */; };
 		6B534E1B263F464D00F032A4 /* PaymentValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B534E1A263F464D00F032A4 /* PaymentValidation.swift */; };
+		6B534E2F263F9C3C00F032A4 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B534E2E263F9C3B00F032A4 /* AuthService.swift */; };
 		6B640305263CAB6300865536 /* AuthenticationValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B640304263CAB6300865536 /* AuthenticationValidation.swift */; };
 		BC0E115F2502F6E1007560B1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0E115E2502F6E1007560B1 /* AppDelegate.swift */; };
 		BC0E11612502F6E1007560B1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC0E11602502F6E1007560B1 /* SceneDelegate.swift */; };
@@ -55,6 +56,7 @@
 		6B534E0D263F3F4400F032A4 /* PaymentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentService.swift; sourceTree = "<group>"; };
 		6B534E12263F462800F032A4 /* PaymentValidationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentValidationTests.swift; sourceTree = "<group>"; };
 		6B534E1A263F464D00F032A4 /* PaymentValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentValidation.swift; sourceTree = "<group>"; };
+		6B534E2E263F9C3B00F032A4 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		6B640304263CAB6300865536 /* AuthenticationValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationValidation.swift; sourceTree = "<group>"; };
 		BC0E115B2502F6E1007560B1 /* NameSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NameSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC0E115E2502F6E1007560B1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				6B534E0D263F3F4400F032A4 /* PaymentService.swift */,
+				6B534E2E263F9C3B00F032A4 /* AuthService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -359,6 +362,7 @@
 				BC0E11962503BD21007560B1 /* CartItemTableViewCell.swift in Sources */,
 				BCCC5DFC2506963000AC95C0 /* AuthManager.swift in Sources */,
 				BCCC5E02250696C000AC95C0 /* LoginResponse.swift in Sources */,
+				6B534E2F263F9C3C00F032A4 /* AuthService.swift in Sources */,
 				BC0E1191250319F5007560B1 /* ShoppingCart.swift in Sources */,
 				BC0E11632502F6E1007560B1 /* DomainSearchViewController.swift in Sources */,
 				BC0E115F2502F6E1007560B1 /* AppDelegate.swift in Sources */,
